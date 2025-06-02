@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Cell, Board, Player, Game } from './game.ts'
+import { type Game } from './game.ts'
 import { generateInitialGame, move } from './game.ts'
 
 type CellProps = {
@@ -7,7 +7,7 @@ type CellProps = {
   x: number
   y: number
 }
-function Cell({game, x, y}: CellProps) {
+function CellDisplay({game, x, y}: CellProps) {
   if (game.board[y][x] === null) {
     return `${x}, ${y}`
   } else {
@@ -29,7 +29,7 @@ function App() {
                 key={`${cellIndex}, ${rowIndex}`}
                 onClick={() => setGame(move(game, cellIndex, rowIndex))}
               > 
-                <Cell game={game} x={cellIndex} y={rowIndex} />
+                <CellDisplay game={game} x={cellIndex} y={rowIndex} />
               </div>
             ))
         }
