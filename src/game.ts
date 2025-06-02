@@ -21,12 +21,17 @@ export function generateInitialGame(): Game {
     currentPlayer: 'x',
     board: [[null, null, null, null],[null, null, null, null],[null, null, null, null]],
     done: false,
-    contextMessage: "New Game",
+    contextMessage: "It's x's Turn",
   }
   return newGame
 }
 
 export function move(curGame: Game, cellx: number, celly: number): Game {
+  if (curGame.done) {
+    // The game is over! Return an exact copy
+    return curGame;
+  }
+
   // if the cell is as-of-yet unclicked
   if (curGame.board[celly][cellx] === null) {
     // create a structured clone
@@ -47,25 +52,32 @@ export function move(curGame: Game, cellx: number, celly: number): Game {
         newGame.currentPlayer = 'x';
       }
       // Set the context messages
-      newGame.contextMessage = `Now advancing to ${newGame.currentPlayer}'s turn`
+      newGame.contextMessage = `It's ${newGame.currentPlayer}'s Turn`;
+
+      // Check if we've reached a stalemate
+      if (checkStalemate(newGame)) {
+        newGame.contextMessage = 'Stalemate!';
+        newGame.done = true;
+      }
+
       // return the game
-      return newGame
+      return newGame;
     } else {
       // the player who last moved won!
-      newGame.done = true
-      newGame.contextMessage = `Player ${newGame.currentPlayer} has won`
-      console.log('WIN!')
-      return newGame
+      newGame.done = true;
+      newGame.contextMessage = `Player ${newGame.currentPlayer} has won!`;
+      console.log('WIN!');
+      return newGame;
     }
 
   } else {
-    return {...curGame, contextMessage: 'Cell Already Occupied'}
+    return curGame
   }
 }
 
 export function checkWin(curGame: Game): Boolean {
   console.log("Checking for a win on this board:")
-  logBoard(curGame)
+  //logBoard(curGame)
   // check for a vertical win
   for (let x = 0; x < 3; x++) {
     const cols = [
@@ -81,13 +93,13 @@ export function checkWin(curGame: Game): Boolean {
   }
 
   // check for a left-set horizontal win
-  for (let y = 0; y < 2; y++) {
+  for (let y = 0; y < 3; y++) {
     const leftRows = [
       curGame.board[y][0],
       curGame.board[y][1],
       curGame.board[y][2]
     ]
-    //console.log(`Left rows checked: ${leftRows}`)
+    console.log(`Left rows checked: ${leftRows}`)
     if (leftRows.every(val => val !== null) && new Set(leftRows).size === 1) {
       console.log('Win found')
       return true
@@ -95,7 +107,7 @@ export function checkWin(curGame: Game): Boolean {
   }
 
   // check for a right-set horizontal win
-  for (let y = 0; y < 2; y++) {
+  for (let y = 0; y < 3; y++) {
     const rightRows = [
       curGame.board[y][1],
       curGame.board[y][2],
@@ -129,7 +141,7 @@ export function checkWin(curGame: Game): Boolean {
     curGame.board[1][1+i],
     curGame.board[2][0+i]
   ]
-  console.log(`Positive slope diagonals checked: ${posDiags}`)
+  //console.log(`Positive slope diagonals checked: ${posDiags}`)
   if (posDiags.every(val => val !== null) && new Set(posDiags).size === 1) {
     console.log('Win found')
     return true
@@ -138,4 +150,16 @@ export function checkWin(curGame: Game): Boolean {
 
   console.log('No win')
   return false
+}
+
+export function checkStalemate(curGame: Game): Boolean {
+  for (let y = 0; y < 3; y++) {
+    for (let x = 0; x < 4; x++) {
+      if (curGame.board[y][x] === null) {
+        console.log(`Found Null at x:${x}, y:${y}`)
+        return false
+      }
+    }
+  }
+  return true
 }

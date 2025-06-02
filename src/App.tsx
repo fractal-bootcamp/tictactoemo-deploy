@@ -1,42 +1,88 @@
 import { useState } from 'react'
-import { Cell, Board, Player, Game } from './game.ts'
+import { type Game } from './game.ts'
 import { generateInitialGame, move } from './game.ts'
 
+function getCellClassString(curGame: Game, x: number, y: number) {
+  const baseClass = 'flex outline-2 aspect-square w-16 justify-center items-center'
+  if (curGame.board[x][y] === 'x') {
+    return baseClass + ' outline-red-800 bg-red-200';
+  } else if (curGame.board[x][y] === 'o') {
+    return baseClass + ' outline-blue-800 bg-blue-200';
+  } else if (curGame.board[x][y] === 'y') {
+    return baseClass + ' outline-green-800 bg-green-200';
+  } else {
+    return baseClass + ' bg-gray-200';
+  }
+}
+
+type ContextDisplayProps = {contextMessage: String}
+function ContextDisplay({contextMessage}: ContextDisplayProps) {
+  return (
+    <div className="font-bold">
+      {contextMessage}
+    </div>
+  )
+}
+
+type ResetButtonProps = {
+  curGame: Game
+  resetFunc: Function
+}
+function ResetButton({curGame, resetFunc}: ResetButtonProps) {
+  let classString = "flex outline-2 aspect-rectangle w-24 justify-center items-center bg-gray-200"
+  if (!curGame.done) {
+    classString += " invisible";
+  }
+    
+  return (
+    <div 
+      className={classString}
+      onClick={() => resetFunc()}
+    >
+      Rematch!
+    </div>
+  )
+}
+
 type CellProps = {
-  game: Game
+  curGame: Game
   x: number
   y: number
 }
-function Cell({game, x, y}: CellProps) {
-  if (game.board[y][x] === null) {
-    return `${x}, ${y}`
+function CellDisplay({curGame, x, y}: CellProps) {
+  if (curGame.board[y][x] === null) {
+    return null
   } else {
-    return game.board[y][x]
-  }
-}
+    return curGame.board[y][x]
+  }}
 
 function App() {
   const [game, setGame] = useState(generateInitialGame())
   console.log(game)
+
+  const restartGame = () => {
+    setGame(generateInitialGame())
+  }
+
   return (
-    <div>
-      <h1>Tic Tac Toe Mo</h1>
-      <div>
+    <div className="flex flex-col min-h-screen gap-4 justify-center items-center bg-gray-100">
+      <h1 className="font-bold">Tic Tac Toe Mo</h1>
+      <div className="grid grid-cols-4 gap-2 max-w-fit">
         {
           game.board.map((row, rowIndex) =>
             row.map((cell, cellIndex) =>
               <div 
                 key={`${cellIndex}, ${rowIndex}`}
                 onClick={() => setGame(move(game, cellIndex, rowIndex))}
+                className={getCellClassString(game, rowIndex, cellIndex)}
               > 
-                <Cell game={game} x={cellIndex} y={rowIndex} />
+                <CellDisplay curGame={game} x={cellIndex} y={rowIndex} />
               </div>
             ))
         }
       </div>
-      <p>
-        It's {game.currentPlayer}'s turn!
-      </p>
+      <ContextDisplay contextMessage={game.contextMessage} /> 
+      <ResetButton curGame={game} resetFunc={restartGame}/>
     </div>
   )
 }
