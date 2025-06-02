@@ -9,7 +9,7 @@ type CellProps = {
 }
 function Cell({game, x, y}: CellProps) {
   if (game.board[y][x] === null) {
-    return 'BLANK'
+    return `${x}, ${y}`
   } else {
     return game.board[y][x]
   }
