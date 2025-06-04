@@ -3,6 +3,7 @@ export type Board = Cell[][]
 export type Player = 'x' | 'o' | 'y'
 
 export type Game = {
+  id: String
   currentPlayer: Player
   board: Board
   done: Boolean
@@ -18,8 +19,9 @@ function logBoard(curGame: Game) {
 
 export function generateInitialGame(): Game {
   const newGame: Game = {
+    id: crypto.randomUUID(),
     currentPlayer: 'x',
-    board: [[null, null, null, null],[null, null, null, null],[null, null, null, null]],
+    board: [[null, null, null, null], [null, null, null, null], [null, null, null, null]],
     done: false,
     contextMessage: "It's x's Turn",
   }
@@ -121,32 +123,32 @@ export function checkWin(curGame: Game): Boolean {
   }
 
   // check for a negative slope diag win
- for (let i = 0; i < 2; i++)  {
-  const negDiags = [
-    curGame.board[0][0+i],
-    curGame.board[1][1+i],
-    curGame.board[2][2+i]
-  ]
-  //console.log(`Negative slope diagonals checked: ${negDiags}`)
-  if (negDiags.every(val => val !== null) && new Set(negDiags).size === 1) {
-    console.log('Win found')
-    return true
+  for (let i = 0; i < 2; i++) {
+    const negDiags = [
+      curGame.board[0][0 + i],
+      curGame.board[1][1 + i],
+      curGame.board[2][2 + i]
+    ]
+    //console.log(`Negative slope diagonals checked: ${negDiags}`)
+    if (negDiags.every(val => val !== null) && new Set(negDiags).size === 1) {
+      console.log('Win found')
+      return true
+    }
   }
- }
 
- // check for a positive slope diag win 
- for (let i = 0; i < 2; i++) {
-  const posDiags = [
-    curGame.board[0][2+i],
-    curGame.board[1][1+i],
-    curGame.board[2][0+i]
-  ]
-  //console.log(`Positive slope diagonals checked: ${posDiags}`)
-  if (posDiags.every(val => val !== null) && new Set(posDiags).size === 1) {
-    console.log('Win found')
-    return true
+  // check for a positive slope diag win 
+  for (let i = 0; i < 2; i++) {
+    const posDiags = [
+      curGame.board[0][2 + i],
+      curGame.board[1][1 + i],
+      curGame.board[2][0 + i]
+    ]
+    //console.log(`Positive slope diagonals checked: ${posDiags}`)
+    if (posDiags.every(val => val !== null) && new Set(posDiags).size === 1) {
+      console.log('Win found')
+      return true
+    }
   }
- }
 
   console.log('No win')
   return false
