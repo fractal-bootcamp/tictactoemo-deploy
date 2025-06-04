@@ -3,11 +3,11 @@ export type Board = Cell[][]
 export type Player = 'x' | 'o' | 'y'
 
 export type Game = {
-  id: String
+  id: string
   currentPlayer: Player
   board: Board
-  done: Boolean
-  contextMessage: String
+  done: boolean
+  contextMessage: string
 }
 
 // Utility function for quickly glancing at the board
@@ -56,9 +56,9 @@ export function move(curGame: Game, cellx: number, celly: number): Game {
       // Set the context messages
       newGame.contextMessage = `It's ${newGame.currentPlayer}'s Turn`;
 
-      // Check if we've reached a stalemate
+      // Check if we've reached a tie
       if (checkTie(newGame)) {
-        newGame.contextMessage = 'Stalemate!';
+        newGame.contextMessage = 'Tie Game';
         newGame.done = true;
       }
 
@@ -68,7 +68,7 @@ export function move(curGame: Game, cellx: number, celly: number): Game {
       // the player who last moved won!
       newGame.done = true;
       newGame.contextMessage = `Player ${newGame.currentPlayer} has won!`;
-      console.log('WIN!');
+      //console.log('WIN!');
       return newGame;
     }
 
@@ -77,8 +77,8 @@ export function move(curGame: Game, cellx: number, celly: number): Game {
   }
 }
 
-export function checkWin(curGame: Game): Boolean {
-  console.log("Checking for a win on this board:")
+export function checkWin(curGame: Game): boolean {
+  //console.log("Checking for a win on this board:")
   //logBoard(curGame)
   // check for a vertical win
   for (let x = 0; x < 5; x++) {
@@ -89,7 +89,7 @@ export function checkWin(curGame: Game): Boolean {
     ]
     //console.log(`cols checked: ${cols}`)
     if (cols.every(val => val !== null) && new Set(cols).size === 1) {
-      console.log('Win found')
+      //console.log('Win found')
       return true
     }
   }
@@ -102,7 +102,7 @@ export function checkWin(curGame: Game): Boolean {
         curGame.board[y][1 + i],
         curGame.board[y][2 + i]
       ]
-      console.log(`Rows checked: ${rows}`)
+      // console.log(`Rows checked: ${rows}`)
       if (rows.every(val => val !== null) && new Set(rows).size === 1) {
         console.log('Win found')
         return true
@@ -138,11 +138,11 @@ export function checkWin(curGame: Game): Boolean {
     }
   }
 
-  console.log('No win')
+  //console.log('No win')
   return false
 }
 
-export function checkTie(curGame: Game): Boolean {
+export function checkTie(curGame: Game): boolean {
   if (curGame.board.flat().includes(null)) {
     return false
   } else {
