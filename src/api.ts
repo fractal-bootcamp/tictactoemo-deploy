@@ -57,7 +57,7 @@ export class TicTacToeMoApiClient implements TicTacToeMoApi {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify("x, y")
+      body: JSON.stringify({ x, y })
     })
     const game = await res.json()
     return game
