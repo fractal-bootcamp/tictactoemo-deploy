@@ -21,7 +21,7 @@ export function generateInitialGame(): Game {
   const newGame: Game = {
     id: crypto.randomUUID(),
     currentPlayer: 'x',
-    board: [[null, null, null, null], [null, null, null, null], [null, null, null, null]],
+    board: [[null, null, null, null, null], [null, null, null, null, null], [null, null, null, null, null]],
     done: false,
     contextMessage: "It's x's Turn",
   }
@@ -57,7 +57,7 @@ export function move(curGame: Game, cellx: number, celly: number): Game {
       newGame.contextMessage = `It's ${newGame.currentPlayer}'s Turn`;
 
       // Check if we've reached a stalemate
-      if (checkStalemate(newGame)) {
+      if (checkTie(newGame)) {
         newGame.contextMessage = 'Stalemate!';
         newGame.done = true;
       }
@@ -81,7 +81,7 @@ export function checkWin(curGame: Game): Boolean {
   console.log("Checking for a win on this board:")
   //logBoard(curGame)
   // check for a vertical win
-  for (let x = 0; x < 3; x++) {
+  for (let x = 0; x < 5; x++) {
     const cols = [
       curGame.board[0][x],
       curGame.board[1][x],
@@ -94,36 +94,24 @@ export function checkWin(curGame: Game): Boolean {
     }
   }
 
-  // check for a left-set horizontal win
-  for (let y = 0; y < 3; y++) {
-    const leftRows = [
-      curGame.board[y][0],
-      curGame.board[y][1],
-      curGame.board[y][2]
-    ]
-    console.log(`Left rows checked: ${leftRows}`)
-    if (leftRows.every(val => val !== null) && new Set(leftRows).size === 1) {
-      console.log('Win found')
-      return true
-    }
-  }
-
-  // check for a right-set horizontal win
-  for (let y = 0; y < 3; y++) {
-    const rightRows = [
-      curGame.board[y][1],
-      curGame.board[y][2],
-      curGame.board[y][3]
-    ]
-    //console.log(`Right rows checked: ${rightRows}`)
-    if (rightRows.every(val => val !== null) && new Set(rightRows).size === 1) {
-      console.log('Win found')
-      return true
+  // check for a horizontal win
+  for (let i = 0; i < 3; i++) {
+    for (let y = 0; y < 3; y++) {
+      const rows = [
+        curGame.board[y][0 + i],
+        curGame.board[y][1 + i],
+        curGame.board[y][2 + i]
+      ]
+      console.log(`Rows checked: ${rows}`)
+      if (rows.every(val => val !== null) && new Set(rows).size === 1) {
+        console.log('Win found')
+        return true
+      }
     }
   }
 
   // check for a negative slope diag win
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 3; i++) {
     const negDiags = [
       curGame.board[0][0 + i],
       curGame.board[1][1 + i],
@@ -137,7 +125,7 @@ export function checkWin(curGame: Game): Boolean {
   }
 
   // check for a positive slope diag win 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 3; i++) {
     const posDiags = [
       curGame.board[0][2 + i],
       curGame.board[1][1 + i],
@@ -154,14 +142,10 @@ export function checkWin(curGame: Game): Boolean {
   return false
 }
 
-export function checkStalemate(curGame: Game): Boolean {
-  for (let y = 0; y < 3; y++) {
-    for (let x = 0; x < 4; x++) {
-      if (curGame.board[y][x] === null) {
-        console.log(`Found Null at x:${x}, y:${y}`)
-        return false
-      }
-    }
+export function checkTie(curGame: Game): Boolean {
+  if (curGame.board.flat().includes(null)) {
+    return false
+  } else {
+    return true
   }
-  return true
 }

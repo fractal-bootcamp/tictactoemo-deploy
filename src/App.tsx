@@ -88,7 +88,7 @@ function App() {
       <div className="flex flex-col min-h-screen gap-4 justify-center items-center bg-gray-100">
         <h1 className="font-bold">Tic Tac Toe Mo</h1>
         <h2 className="font-thin text-xs">{game.id}</h2>
-        <div className="grid grid-cols-4 gap-2 max-w-fit">
+        <div className="grid grid-cols-5 gap-2 max-w-fit">
           {
             game.board.map((row, rowIndex) =>
               row.map((cell, cellIndex) =>
