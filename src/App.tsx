@@ -15,7 +15,7 @@ function getCellClassString(curGame: Game, x: number, y: number) {
   }
 }
 
-type ContextDisplayProps = { contextMessage: String }
+type ContextDisplayProps = { contextMessage: string }
 function ContextDisplay({ contextMessage }: ContextDisplayProps) {
   return (
     <div className="font-bold">
@@ -29,19 +29,22 @@ type ResetButtonProps = {
   resetFunc: Function
 }
 function ResetButton({ curGame, resetFunc }: ResetButtonProps) {
-  let classString = "flex outline-2 aspect-rectangle w-24 justify-center items-center bg-gray-200"
+  let classString = "flex outline-2 h-8 w-24 justify-center items-center bg-gray-200"
   if (!curGame.done) {
-    classString += " invisible";
+    return (
+      <div className={classString + " invisible"}></div>
+    )
+  } else {
+    return (
+      <div
+        className={classString}
+        onClick={() => resetFunc()}
+      >
+        Rematch!
+      </div>
+    )
   }
 
-  return (
-    <div
-      className={classString}
-      onClick={() => resetFunc()}
-    >
-      Rematch!
-    </div>
-  )
 }
 
 type CellProps = {
@@ -71,7 +74,7 @@ function App() {
     setGame(newGame)
   }
 
-  const moveAndSetGame = async (id: String, x: number, y: number) => {
+  const moveAndSetGame = async (id: string, x: number, y: number) => {
     const newGame = await api.makeMove(id, x, y)
     console.log(`Game obtained from moveAndSetGame: ${newGame}`)
     setGame(newGame);
