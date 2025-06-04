@@ -57,3 +57,22 @@ test('checkWin: the returned value should be false if no win is found', () => {
   expect(result).toBe(false)
 })
 
+// checkWin() tests
+test('checkWin: the returned value should be true where any vertical three-in-a-row is present', () => {
+  // Setup the test harness
+  const testGameList: Game[] = []
+  for (let i = 0; i < 5; i++) {
+    const newTestGame = generateInitialGame()
+    newTestGame.board[0][i] = 'x'
+    newTestGame.board[1][i] = 'x'
+    newTestGame.board[2][i] = 'x'
+    testGameList.push(newTestGame)
+  }
+  // Execute the function
+  const results: Boolean[] = []
+  for (let testGame of testGameList) {
+    results.push(checkWin(testGame))
+  }
+  // Verify the result
+  expect(results).toStrictEqual([true, true, true, true, true])
+})
