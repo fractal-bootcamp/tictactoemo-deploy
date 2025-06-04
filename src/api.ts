@@ -38,7 +38,7 @@ export class InMemoryTicTacToeMoApi implements TicTacToeMoApi {
   }
 }
 
-export class clientTicTacToeMoApi implements TicTacToeMoApi {
+export class TicTacToeMoApiClient implements TicTacToeMoApi {
   async createGame(): Promise<Game> {
     const res = await fetch("/api/games")
     const game = await res.json()
