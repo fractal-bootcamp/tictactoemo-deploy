@@ -38,7 +38,7 @@ const router = createBrowserRouter([
       const game = await api.getGame(params.gameId)
       return { game }
     }
-  }
+  },
 ])
 
 createRoot(document.getElementById('root')!).render(
