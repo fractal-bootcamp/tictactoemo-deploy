@@ -1,8 +1,10 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Link, useLoaderData } from 'react-router'
+import { Link, useLoaderData, useParams } from 'react-router'
 import { type Game } from './game.ts'
 import { NewGameButton } from './NewGameButton.tsx'
 import { TicTacToeMoApiClient } from './api.ts'
+import { io } from "socket.io-client"
+import { GAME_UPDATED, USER_JOINED, REQUEST_GAME } from '../constants'
 
 // Utility function used to produced the class string for a cell at a given coordinate 
 function getCellClassString(curGame: Game, x: number, y: number) {
@@ -74,13 +76,27 @@ function CellDisplay({ curGame, x, y }: CellProps) {
 
 export function GameView() {
   const api = useMemo(() => new TicTacToeMoApiClient(), [])
-  const { game: incomingGame } = useLoaderData<{ game: Game }>()
+  const { gameId } = useParams()
+  const [game, setGame] = useState<Game | undefined>(undefined)
 
   useEffect(() => {
-    setGame(incomingGame)
-  }, [incomingGame])
+    // setup the socket client
+    const socket = io('http://localhost:3000')
+    socket.on("connect", () => {
+      console.log('connected to socket')
+      // send a signal about joining the game room
+      socket.emit('join-game', gameId)
 
-  const [game, setGame] = useState<Game | undefined>(undefined)
+      // set the socket client to update the game when it receives a 'GAME_UPDATE' signal
+      socket.on(GAME_UPDATED, (game: Game) => {
+        console.log(`game updated\n${JSON.stringify(game)}`)
+        setGame(game)
+      })
+
+      // request a copy of the game associated with this ID
+      socket.emit(REQUEST_GAME, gameId)
+    })
+  }, [gameId])
 
   const moveAndSetGame = async (id: string, x: number, y: number) => {
     const newGame = await api.makeMove(id, x, y)

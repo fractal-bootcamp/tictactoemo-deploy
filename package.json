@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node server.ts --watch",
+    "dev": "node --watch server.ts",
     "test": "vitest",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
@@ -20,6 +20,7 @@
     "react-dom": "^19.1.0",
     "react-router": "^7.6.2",
     "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "tailwindcss": "^4.1.8",
     "vite-express": "^0.21.1",
     "vitest": "^3.2.1"

@@ -1,10 +1,10 @@
 import express from "express"
 import ViteExpress from "vite-express";
-import { Game } from './src/game.ts'
+import type { Game } from './src/game.ts'
 import { InMemoryTicTacToeMoApi } from "./src/api.ts"
 import { DbTicTacToeMo } from "./src/db/db.ts"
 import { Server } from "socket.io"
-import { USER_JOINED, GAME_UPDATED } from './constants.ts'
+import { USER_JOINED, GAME_UPDATED, REQUEST_GAME } from './constants.ts'
 import cors from "cors"
 
 const PORT = parseInt(process.env.PORT || "3000");
@@ -89,15 +89,21 @@ io.on('connection', (socket) => {
     if (!game) {
       console.error(`Game ${gameId} not found`)
       return;
-    } else {
-      // create a roomId from the game id
-      const roomId = makeRoomId(game)
-      // add this connection to that room and log such
-      socket.join(roomId)
-      console.log(`Socket ${socket.id} joined room ${roomId}`)
-      // send a signal to all the other connections in this room, letting them know the new connection joined
-      io.to(roomId).emit(USER_JOINED, socket.id)
     }
+    // create a roomId from the game id
+    const roomId = makeRoomId(game)
+    // add this connection to that room and log such
+    socket.join(roomId)
+    console.log(`Socket ${socket.id} joined room ${roomId}`)
+    // send a signal to all the other connections in this room, letting them know the new connection joined
+    io.to(roomId).emit(USER_JOINED, socket.id)
+  })
+
+  // when this connection sends a request-game signal, give them that game
+  socket.on(REQUEST_GAME, async (gameId: string) => {
+    console.log(`Received request for game ${gameId} from ${socket.id}`)
+    const game = await api.getGame(gameId)
+    io.to(socket.id).emit(GAME_UPDATED, game)
   })
 })
 
