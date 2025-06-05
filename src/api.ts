@@ -53,13 +53,13 @@ export class InMemoryTicTacToeMoApi implements TicTacToeMoApi {
 
 export class TicTacToeMoApiClient implements TicTacToeMoApi {
   async createGame(): Promise<Game> {
-    const res = await fetch("/api/games")
+    const res = await fetch("/api/newGame")
     const game = await res.json()
     return game
   }
 
   async getGame(gameId: string): Promise<Game> {
-    const res = await fetch(`/api/games/${gameId}`)
+    const res = await fetch(`/api/game/${gameId}`)
     const game = await res.json()
     return game
   }
@@ -71,7 +71,7 @@ export class TicTacToeMoApiClient implements TicTacToeMoApi {
   }
 
   async makeMove(gameId: string, x: number, y: number): Promise<Game> {
-    const res = await fetch(`/api/games/${gameId}/move`, {
+    const res = await fetch(`/api/game/${gameId}/move`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

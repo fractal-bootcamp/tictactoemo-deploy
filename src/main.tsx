@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import { TicTacToeMoApiClient } from './api'
@@ -29,13 +28,21 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: '/games/:gameId',
+    path: '/game/:gameId',
     Component: GameView,
     loader: async ({ params }) => {
       if (!params.gameId) {
         throw new Error("Game ID is required")
       }
       const game = await api.getGame(params.gameId)
+      return { game }
+    }
+  },
+  {
+    path: '/game/newGame',
+    Component: GameView,
+    loader: async () => {
+      const game = await api.createGame()
       return { game }
     }
   }

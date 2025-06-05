@@ -1,5 +1,4 @@
 import { Link, useLoaderData } from 'react-router'
-import type { Game } from './game'
 import { useState } from 'react'
 
 export function Lobby() {
@@ -12,14 +11,19 @@ export function Lobby() {
       <div className="font-bold">
         Welcome to TicTacToeMo
       </div>
+      <Link className="flex outline-2 h-8 w-32 justify-center items-center bg-gray-200" to="/game/newGame">
+        Create a Game
+      </Link>
       <div>
-        Open Games
+        Or join an open game --
       </div>
-      {gamesList.map((gameId) => (
-        <div key={gameId} className="text-xs">
-          <Link to={`/games/${gameId}`}>{gameId}</Link>
-        </div>
-      ))}
+      {
+        gamesList.map((gameId) => (
+          <div key={gameId} className="text-xs">
+            <Link to={`/game/${gameId}`}>{gameId}</Link>
+          </div>
+        ))
+      }
     </div >
   )
 }

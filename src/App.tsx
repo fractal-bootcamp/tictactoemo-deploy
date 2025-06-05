@@ -1,5 +1,3 @@
-import { GameView } from './GameView.tsx'
-import { Lobby } from './Lobby.tsx'
 import { Outlet } from 'react-router';
 
 function App() {
@@ -10,6 +8,5 @@ function App() {
     </div>
   )
 }
-
 
 export default App

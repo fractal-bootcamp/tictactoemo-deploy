@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { useLoaderData } from 'react-router'
+import { Link, useLoaderData } from 'react-router'
 import { type Game } from './game.ts'
 import { TicTacToeMoApiClient } from './api.ts'
 
@@ -27,11 +27,8 @@ function ContextDisplay({ contextMessage }: ContextDisplayProps) {
   )
 }
 
-type ResetButtonProps = {
-  curGame: Game
-  resetFunc: Function
-}
-function ResetButton({ curGame, resetFunc }: ResetButtonProps) {
+type PostGameButtonsProps = { curGame: Game }
+function PostGameButtons({ curGame }: PostGameButtonsProps) {
   let classString = "flex outline-2 h-8 w-24 justify-center items-center bg-gray-200"
   if (!curGame.done) {
     return (
@@ -39,12 +36,14 @@ function ResetButton({ curGame, resetFunc }: ResetButtonProps) {
     )
   } else {
     return (
-      <div
-        className={classString}
-        onClick={() => resetFunc()}
-      >
-        Rematch!
-      </div>
+      <div className="flex flex-row gap-4">
+        <button className={classString} onClick={() => window.location.reload()}>
+          Rematch
+        </button>
+        <Link className={classString} to="/">
+          Lobby
+        </Link>
+      </div >
     )
   }
 }
@@ -68,11 +67,6 @@ export function GameView() {
   const { game: incomingGame } = useLoaderData<{ game: Game }>()
 
   const [game, setGame] = useState<Game | undefined>(incomingGame)
-
-  const restartGame = async () => {
-    const newGame = await api.createGame()
-    setGame(newGame)
-  }
 
   const moveAndSetGame = async (id: string, x: number, y: number) => {
     const newGame = await api.makeMove(id, x, y)
@@ -106,7 +100,7 @@ export function GameView() {
           }
         </div>
         <ContextDisplay contextMessage={game.contextMessage} />
-        <ResetButton curGame={game} resetFunc={restartGame} />
+        <PostGameButtons curGame={game} />
       </div >
     )
   }
