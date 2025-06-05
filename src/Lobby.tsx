@@ -20,7 +20,7 @@ export function Lobby() {
       {
         gamesList.map((gameId) => (
           <div key={gameId} className="text-xs">
-            <Link to={`/games/${gameId}`}>{gameId}</Link>
+            <Link to={`/game/${gameId}`}>{gameId}</Link>
           </div>
         ))
       }
