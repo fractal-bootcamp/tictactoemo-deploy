@@ -16,13 +16,28 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        Component: Lobby
+        Component: Lobby,
+        loader: async () => {
+          const pendingGames = await api.getPendingGames()
+          return { pendingGames }
+        }
       },
       {
         path: '/game',
         Component: GameView
       }
     ]
+  },
+  {
+    path: '/games/:gameId',
+    Component: GameView,
+    loader: async ({ params }) => {
+      if (!params.gameId) {
+        throw new Error("Game ID is required")
+      }
+      const game = await api.getGame(params.gameId)
+      return { game }
+    }
   }
 ])
 

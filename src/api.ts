@@ -9,7 +9,7 @@ export interface TicTacToeMoApi {
   getGame(gameId: string): Promise<Game>
 
   // Function which retrieves a list of gameId values associated w/ incomplete games
-  getGames(): Promise<string[]>
+  getPendingGames(): Promise<string[]>
 
   // Function which delivers a move to a game
   makeMove(gameId: string, x: number, y: number): Promise<Game>
@@ -33,7 +33,7 @@ export class InMemoryTicTacToeMoApi implements TicTacToeMoApi {
     }
   }
 
-  async getGames(): Promise<string[]> {
+  async getPendingGames(): Promise<string[]> {
     const incompleteGames = []
     for (const [id, game] of this.games) {
       if (!game.done) {
@@ -64,8 +64,8 @@ export class TicTacToeMoApiClient implements TicTacToeMoApi {
     return game
   }
 
-  async getGames(): Promise<string[]> {
-    const res = await fetch(`/api/gamesList`)
+  async getPendingGames(): Promise<string[]> {
+    const res = await fetch(`/api/pendingGames`)
     const gamesList = await res.json()
     return gamesList
   }

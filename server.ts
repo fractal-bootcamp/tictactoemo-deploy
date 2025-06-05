@@ -20,9 +20,9 @@ app.get("/api/games", async (req, res) => {
   }
 })
 
-app.get("/api/gamesList", async (req, res) => {
+app.get("/api/pendingGames", async (req, res) => {
   try {
-    const gamesList = await api.getGames()
+    const gamesList = await api.getPendingGames()
     res.status(200).json(gamesList)
   } catch {
     res.status(404).json({ error: `Error fetching gamesList` })

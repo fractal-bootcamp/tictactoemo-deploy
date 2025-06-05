@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { useLoaderData } from 'react-router'
 import { type Game } from './game.ts'
 import { TicTacToeMoApiClient } from './api.ts'
 
@@ -64,11 +65,9 @@ function CellDisplay({ curGame, x, y }: CellProps) {
 export function GameView() {
   const api = useMemo(() => new TicTacToeMoApiClient(), [])
 
-  const [game, setGame] = useState<Game | undefined>(undefined)
+  const { game: incomingGame } = useLoaderData<{ game: Game }>()
 
-  useEffect(() => {
-    restartGame()
-  }, [])
+  const [game, setGame] = useState<Game | undefined>(incomingGame)
 
   const restartGame = async () => {
     const newGame = await api.createGame()

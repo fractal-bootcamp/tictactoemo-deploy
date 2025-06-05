@@ -32,7 +32,7 @@ export class DbTicTacToeMo implements TicTacToeMoApi {
     }
   }
 
-  async getGames(): Promise<string[]> {
+  async getPendingGames(): Promise<string[]> {
     const res = await this.db.select().from(gamesTable).where(eq(gamesTable.done, false))
     const gameIds = res.map(game => game.id)
     return gameIds
