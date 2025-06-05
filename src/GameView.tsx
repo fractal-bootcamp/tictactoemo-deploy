@@ -6,6 +6,16 @@ import { TicTacToeMoApiClient } from './api.ts'
 // Utility function used to produced the class string for a cell at a given coordinate 
 function getCellClassString(curGame: Game, x: number, y: number) {
   const baseClass = 'flex outline-2 aspect-square w-16 justify-center items-center'
+
+  let curPlayerHoverColor = ''
+  if (curGame.currentPlayer == 'x') {
+    curPlayerHoverColor = ' hover:bg-red-100'
+  } else if (curGame.currentPlayer == 'o') {
+    curPlayerHoverColor = ' hover:bg-blue-100'
+  } else {
+    curPlayerHoverColor = ' hover:bg-green-100'
+  }
+
   if (curGame.board[x][y] === 'x') {
     return baseClass + ' outline-red-800 bg-red-200';
   } else if (curGame.board[x][y] === 'o') {
@@ -13,7 +23,7 @@ function getCellClassString(curGame: Game, x: number, y: number) {
   } else if (curGame.board[x][y] === 'y') {
     return baseClass + ' outline-green-800 bg-green-200';
   } else {
-    return baseClass + ' bg-gray-200';
+    return baseClass + ' bg-gray-200' + curPlayerHoverColor;
   }
 }
 
@@ -29,7 +39,7 @@ function ContextDisplay({ contextMessage }: ContextDisplayProps) {
 
 type PostGameButtonsProps = { curGame: Game }
 function PostGameButtons({ curGame }: PostGameButtonsProps) {
-  let classString = "flex outline-2 h-8 w-24 justify-center items-center bg-gray-200"
+  let classString = "flex outline-2 h-8 w-24 justify-center items-center bg-gray-200 hover:bg-gray-300 hover:cursor-pointer"
   if (!curGame.done) {
     return (
       <div className={classString + " invisible"}></div>
