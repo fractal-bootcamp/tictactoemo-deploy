@@ -32,6 +32,12 @@ export class DbTicTacToeMo implements TicTacToeMoApi {
     }
   }
 
+  async getGames(): Promise<string[]> {
+    const res = await this.db.select().from(gamesTable).where(eq(gamesTable.done, false))
+    const gameIds = res.map(game => game.id)
+    return gameIds
+  }
+
   async makeMove(gameId: string, x: number, y: number): Promise<Game> {
     const curGame = await this.getGame(gameId)
     const newGame = move(curGame, x, y)

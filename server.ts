@@ -20,6 +20,15 @@ app.get("/api/games", async (req, res) => {
   }
 })
 
+app.get("/api/gamesList", async (req, res) => {
+  try {
+    const gamesList = await api.getGames()
+    res.status(200).json(gamesList)
+  } catch {
+    res.status(404).json({ error: `Error fetching gamesList` })
+  }
+})
+
 app.get("/api/games/:id", async (req, res) => {
   try {
     const requestedGame = await api.getGame(req.params.id)
