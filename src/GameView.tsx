@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { useLoaderData } from 'react-router'
+import { Link, useLoaderData } from 'react-router'
 import { type Game } from './game.ts'
 import { TicTacToeMoApiClient } from './api.ts'
 
@@ -27,11 +27,8 @@ function ContextDisplay({ contextMessage }: ContextDisplayProps) {
   )
 }
 
-type ResetButtonProps = {
-  curGame: Game
-  resetFunc: Function
-}
-function ResetButton({ curGame, resetFunc }: ResetButtonProps) {
+type ResetButtonProps = { curGame: Game }
+function ResetButton({ curGame }: ResetButtonProps) {
   let classString = "flex outline-2 h-8 w-24 justify-center items-center bg-gray-200"
   if (!curGame.done) {
     return (
@@ -39,10 +36,7 @@ function ResetButton({ curGame, resetFunc }: ResetButtonProps) {
     )
   } else {
     return (
-      <div
-        className={classString}
-        onClick={() => resetFunc()}
-      >
+      <div className={classString} onClick={() => window.location.reload()}>
         Rematch!
       </div>
     )
@@ -106,7 +100,7 @@ export function GameView() {
           }
         </div>
         <ContextDisplay contextMessage={game.contextMessage} />
-        <ResetButton curGame={game} resetFunc={restartGame} />
+        <ResetButton curGame={game} />
       </div >
     )
   }
