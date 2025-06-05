@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Link, useLoaderData } from 'react-router'
 import { type Game } from './game.ts'
+import { NewGameButton } from './NewGameButton.tsx'
 import { TicTacToeMoApiClient } from './api.ts'
 
 // Utility function used to produced the class string for a cell at a given coordinate 
@@ -42,14 +43,14 @@ function PostGameButtons({ curGame }: PostGameButtonsProps) {
   let classString = "flex outline-2 h-8 w-24 justify-center items-center bg-gray-200 hover:bg-gray-300 hover:cursor-pointer"
   if (!curGame.done) {
     return (
-      <div className={classString + " invisible"}></div>
+      <Link className={classString} to="/">
+        Lobby
+      </Link>
     )
   } else {
     return (
       <div className="flex flex-row gap-4">
-        <button className={classString} onClick={() => window.location.reload()}>
-          Rematch
-        </button>
+        < NewGameButton />
         <Link className={classString} to="/">
           Lobby
         </Link>
@@ -73,10 +74,13 @@ function CellDisplay({ curGame, x, y }: CellProps) {
 
 export function GameView() {
   const api = useMemo(() => new TicTacToeMoApiClient(), [])
-
   const { game: incomingGame } = useLoaderData<{ game: Game }>()
 
-  const [game, setGame] = useState<Game | undefined>(incomingGame)
+  useEffect(() => {
+    setGame(incomingGame)
+  }, [incomingGame])
+
+  const [game, setGame] = useState<Game | undefined>(undefined)
 
   const moveAndSetGame = async (id: string, x: number, y: number) => {
     const newGame = await api.makeMove(id, x, y)
