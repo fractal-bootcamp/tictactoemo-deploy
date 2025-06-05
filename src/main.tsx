@@ -25,13 +25,6 @@ const router = createBrowserRouter([
       {
         path: '/game/:gameId',
         Component: GameView,
-        loader: async ({ params }) => {
-          if (!params.gameId) {
-            throw new Error("Game ID is required")
-          }
-          const game = await api.getGame(params.gameId)
-          return { game }
-        }
       },
       {
         path: '/game/new',
@@ -47,7 +40,5 @@ const router = createBrowserRouter([
 ])
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>
+  <RouterProvider router={router} />
 )
