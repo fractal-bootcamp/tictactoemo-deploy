@@ -1,8 +1,13 @@
-import { GameDisplay } from './GameDisplay.tsx'
+import { GameView } from './GameView.tsx'
+import { Lobby } from './Lobby.tsx'
+import { Outlet } from 'react-router';
 
 function App() {
   return (
-    <GameDisplay />
+    <div>
+      <h2>YEAH WE PLAYING TICTACTOEMO</h2>
+      <Outlet />
+    </div>
   )
 }
 
