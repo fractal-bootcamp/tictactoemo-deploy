@@ -4,12 +4,13 @@ import { DbTicTacToeMo } from "./src/db/db.ts"
 import { Server } from "socket.io"
 import { USER_JOINED, GAME_UPDATED, REQUEST_GAME } from './constants.ts'
 import cors from "cors"
+import { CLIENT_URL } from "./src/utils/constants.ts"
 
 const PORT = parseInt(process.env.PORT || "3000");
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: CLIENT_URL,
   methods: ['GET', 'POST']
 }))
 
@@ -73,7 +74,7 @@ const server = app.listen(PORT, () => console.log(`Server is listening at http:/
 // Setup CORS for socket.io server?
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: CLIENT_URL,
     methods: ['GET', 'POST'],
   }
 })
