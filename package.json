@@ -10,7 +10,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "serve": "bun server.ts"
+    "serve": "bun server.ts",
+    "docker:build": "docker build -t tictactoe-server .",
+    "docker:run": "docker run -p 3000:3000 tictactoe-server"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.8",
