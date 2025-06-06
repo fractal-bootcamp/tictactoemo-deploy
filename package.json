@@ -4,11 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node --watch server.ts",
+    "dev": "bun --watch server.ts",
     "test": "vitest",
+    "start": "bun vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "serve": "bun server.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.8",

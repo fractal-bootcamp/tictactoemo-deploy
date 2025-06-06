@@ -1,7 +1,5 @@
 import express from "express"
-import ViteExpress from "vite-express";
 import type { Game } from './src/game.ts'
-import { InMemoryTicTacToeMoApi } from "./src/api.ts"
 import { DbTicTacToeMo } from "./src/db/db.ts"
 import { Server } from "socket.io"
 import { USER_JOINED, GAME_UPDATED, REQUEST_GAME } from './constants.ts'
@@ -14,6 +12,10 @@ app.use(cors({
   origin: 'http://localhost:5173',
   methods: ['GET', 'POST']
 }))
+
+app.get("/", async (req, res) => {
+  res.send("hello world")
+})
 
 // utility function for generating consistent roomIds from games
 const makeRoomId = (game: Game) => `room-${game.id}`
